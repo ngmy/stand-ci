@@ -1,0 +1,21 @@
+body {
+  padding-top: 10px;
+}
+
+.hatching {
+  color: #fff !important;
+  padding: .2em .6em .3em !important;
+  border-radius: .25em !important;
+}
+
+.hatching-good {
+  background-color: #5cb85c !important;
+}
+
+.hatching-warning {
+  background-color: #f0ad4e !important;
+}
+
+.hatching-critical {
+  background-color: #d9534f !important;
+}
