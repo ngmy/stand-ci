@@ -1,0 +1,12 @@
+footer {
+  padding-top: 10px;
+}
+
+iframe {
+  width: 100% !important;
+  border: 0px;
+}
+
+.pagination-centered {
+  text-align: center;
+}
