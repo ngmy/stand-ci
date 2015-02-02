@@ -1,6 +1,13 @@
 {
     "name": "ngmy/stand-ci",
-    "description": "",
+    "description": "A continuous integration tool designed for Laravel 4 application",
+    "keywords": [
+        "laravel 4",
+        "continuous integration",
+        "ci",
+        "testing"
+    ],
+    "license": "MIT",
     "authors": [
         {
             "name": "ngmy",
