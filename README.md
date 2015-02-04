@@ -1,5 +1,10 @@
 # Stand CI
 
+[![Latest Stable Version](https://poser.pugx.org/ngmy/stand-ci/v/stable.svg)](https://packagist.org/packages/ngmy/stand-ci)
+[![Total Downloads](https://poser.pugx.org/ngmy/stand-ci/downloads.svg)](https://packagist.org/packages/ngmy/stand-ci)
+[![Latest Unstable Version](https://poser.pugx.org/ngmy/stand-ci/v/unstable.svg)](https://packagist.org/packages/ngmy/stand-ci)
+[![License](https://poser.pugx.org/ngmy/stand-ci/license.svg)](https://packagist.org/packages/ngmy/stand-ci)
+
 Stand CI is a continuous integration tool designed for Laravel 4 application.
 It can easily be integrated into your Laravel 4 application.
 
