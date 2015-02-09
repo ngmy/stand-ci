@@ -5,20 +5,14 @@
  * Licensed under MIT License.
  *
  * @package    StandCi
- * @version    0.1.0
+ * @version    2.0.0
  * @author     Ngmy <y.nagamiya@gmail.com>
  * @license    http://opensource.org/licenses/MIT MIT License
  * @copyright  (c) 2015, Ngmy <y.nagamiya@gmail.com>
  * @link       https://github.com/ngmy/stand-ci
  */
 
-use Ngmy\StandCi\Build;
-use Ngmy\StandCi\Repo\Build\FileBuild;
-use Ngmy\StandCi\Service\Lock\FileLocker;
 use Ngmy\StandCi\Service\Task\TaskContext;
-use Ngmy\StandCi\Service\Notification\MailNotifier;
-use Ngmy\StandCi\Exception\StandCiException;
-use Ngmy\StandCi\Exception\NotifyHandler;
 use Illuminate\Support\ServiceProvider;
 
 class StandCiServiceProvider extends ServiceProvider {
@@ -37,10 +31,10 @@ class StandCiServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('ngmy/stand-ci', 'stand-ci');
-
+		$this->bootConfig();
+		$this->bootAsset();
+		$this->bootView();
 		$this->bootRoutes();
-		$this->bootException();
 	}
 
 	/**
@@ -50,11 +44,8 @@ class StandCiServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
+		$this->registerServiceProviders();
 		$this->registerCommands();
-		$this->registerRepo();
-		$this->registerException();
-		$this->registerLocker();
-		$this->registerNotifier();
 	}
 
 	/**
@@ -68,6 +59,45 @@ class StandCiServiceProvider extends ServiceProvider {
 	}
 
 	/**
+	 * Bootstrap the application config.
+	 *
+	 * @return void
+	 */
+	protected function bootConfig()
+	{
+		$this->publishes([
+			__DIR__.'/../../config/config.php'       => config_path('packages/ngmy/stand-ci/ngmy-stand-ci.php'),
+			__DIR__.'/../../config/notification.php' => config_path('packages/ngmy/stand-ci/ngmy-stand-ci-notification.php'),
+			__DIR__.'/../../config/phpunit.xml.dist' => config_path('packages/ngmy/stand-ci/phpunit.xml.dist'),
+		], 'config');
+
+		$this->mergeConfigFrom(__DIR__.'/../../config/config.php', 'ngmy-stand-ci');
+		$this->mergeConfigFrom(__DIR__.'/../../config/notification.php', 'ngmy-stand-ci-notification');
+	}
+
+	/**
+	 * Bootstrap the application asset.
+	 *
+	 * @return void
+	 */
+	protected function bootAsset()
+	{
+		$this->publishes([
+			__DIR__.'/../../../public' => public_path('packages/ngmy/stand-ci'),
+		], 'asset');
+	}
+
+	/**
+	 * Bootstrap the application view.
+	 *
+	 * @return void
+	 */
+	protected function bootView()
+	{
+		$this->loadViewsFrom(__DIR__.'/../../views', 'stand-ci');
+	}
+
+	/**
 	 * Bootstrap the application routes.
 	 *
 	 * @return void
@@ -76,24 +106,26 @@ class StandCiServiceProvider extends ServiceProvider {
 	{
 		$app = $this->app;
 
-		if ($app['config']->get('stand-ci::publish_routes')) {
-			include_once(__DIR__ . '/../../routes.php');
+		if ($app['config']['ngmy-stand-ci']['publish_routes']) {
+			include_once(__DIR__.'/../../routes.php');
 		}
 	}
 
 	/**
-	 * Bootstrap the application exceptions.
+	 * Register the package service providers.
 	 *
 	 * @return void
 	 */
-	protected function bootException()
+	protected function registerServiceProviders()
 	{
 		$app = $this->app;
 
-		$app->error(function(StandCiException $e) use ($app)
-		{
-			$app['stand-ci.exception']->handle($e);
-		});
+		$app->register('Illuminate\Html\HtmlServiceProvider');
+
+		$app->register('Ngmy\StandCi\Exception\ExceptionServiceProvider');
+		$app->register('Ngmy\StandCi\Repo\RepoServiceProvider');
+		$app->register('Ngmy\StandCi\Service\Lock\LockServiceProvider');
+		$app->register('Ngmy\StandCi\Service\Notification\NotificationServiceProvider');
 	}
 
 	/**
@@ -115,7 +147,7 @@ class StandCiServiceProvider extends ServiceProvider {
 			$build  = $app->make('Ngmy\StandCi\Repo\Build\BuildInterface');
 			$locker = $app->make('Ngmy\StandCi\Service\Lock\LockerInterface');
 
-			foreach ($config['stand-ci::tasks'] as $name => $params) {
+			foreach ($config['ngmy-stand-ci']['tasks'] as $name => $params) {
 				$taskStrategy = new $params['strategy']($outputDir);
 
 				$taskStrategy->failOnError($params['failonerror'])
@@ -139,87 +171,6 @@ class StandCiServiceProvider extends ServiceProvider {
 			'command.stand-ci.build',
 			'command.stand-ci.housekeep',
 		));
-	}
-
-	/**
-	 * Register the application repositories.
-	 *
-	 * @return void
-	 */
-	protected function registerRepo()
-	{
-		$this->app->bind('Ngmy\StandCi\Repo\Build\BuildInterface', function ($app) {
-			$directory = storage_path().'/packages/ngmy/stand-ci/builds';
-
-			return new FileBuild($directory);
-		});
-	}
-
-	/**
-	 * Register the application exceptions.
-	 *
-	 * @return void
-	 */
-	protected function registerException()
-	{
-		$app = $this->app;
-
-		$app['stand-ci.exception'] = $app->share(function ($app)
-		{
-			return new NotifyHandler($app['stand-ci.notifier']);
-		});
-	}
-
-	/**
-	 * Register the service provider of the lock service.
-	 *
-	 * @return void
-	 */
-	protected function registerLocker()
-	{
-		$app = $this->app;
-
-		$app['stand-ci.locker'] = $app->share(function ($app)
-		{
-			$config = $app['config'];
-
-			$locker = $app->make('Ngmy\StandCi\Service\Lock\LockerInterface');
-
-			return $locker;
-		});
-
-		$app->bind('Ngmy\StandCi\Service\Lock\LockerInterface', function ($app) {
-			$lockFile = storage_path().'/packages/ngmy/stand-ci/lock.json';
-
-			return new FileLocker($lockFile);
-		});
-	}
-
-	/**
-	 * Register the service provider of the notification service.
-	 *
-	 * @return void
-	 */
-	protected function registerNotifier()
-	{
-		$app = $this->app;
-
-		$app['stand-ci.notifier'] = $app->share(function ($app)
-		{
-			$config = $app['config'];
-
-			if ($config['stand-ci::notification.pretend']) {
-				return null;
-			}
-
-			if ($config['stand-ci::notification.notifier'] === 'mail') {
-				$notifier = new MailNotifier;
-
-				$notifier->from($config['stand-ci::notification.mail.from'])->to($config['stand-ci::notification.mail.to']);
-
-				return $notifier;
-			}
-		});
 	}
 
 }

@@ -5,7 +5,7 @@
  * Licensed under MIT License.
  *
  * @package    StandCi
- * @version    0.1.0
+ * @version    2.0.0
  * @author     Ngmy <y.nagamiya@gmail.com>
  * @license    http://opensource.org/licenses/MIT MIT License
  * @copyright  (c) 2015, Ngmy <y.nagamiya@gmail.com>
@@ -15,7 +15,6 @@
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Ngmy\StandCi\Repo\Build\BuildInterface;
 
@@ -64,7 +63,7 @@ class HousekeepCommand extends Command {
 
 		foreach ($targetBuilds as $targetBuild) {
 			$this->build->deleteById($targetBuild->id);
-			File::deleteDirectory(public_path().'/'.$targetBuild->artifact);
+			File::deleteDirectory(public_path($targetBuild->artifact));
 		}
 
 		$this->info('Finish housekeeping.');
@@ -88,7 +87,7 @@ class HousekeepCommand extends Command {
 	protected function getOptions()
 	{
 		return array(
-			array('max-builds', null, InputOption::VALUE_REQUIRED, 'The maximum number of builds to keep.', Config::get('stand-ci::max_builds')),
+			array('max-builds', null, InputOption::VALUE_REQUIRED, 'The maximum number of builds to keep.', config('ngmy-stand-ci')['max_builds']),
 		);
 	}
 }

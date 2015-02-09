@@ -5,7 +5,7 @@
  * Licensed under MIT License.
  *
  * @package    StandCi
- * @version    0.1.0
+ * @version    2.0.0
  * @author     Ngmy <y.nagamiya@gmail.com>
  * @license    http://opensource.org/licenses/MIT MIT License
  * @copyright  (c) 2015, Ngmy <y.nagamiya@gmail.com>
@@ -80,7 +80,7 @@ class PhpMessDetectorTaskStrategy implements TaskStrategyInterface {
 		$xml->load($this->outputDir.'/logs/phpmd.xml');
 
 		$xsl = new DomDocument;
-		$xsl->load(public_path().'/packages/ngmy/stand-ci/xsl/phpmd.xsl');
+		$xsl->load(public_path('packages/ngmy/stand-ci/xsl/phpmd.xsl'));
 
 		$processor = new XSLTProcessor;
 		$processor->importStyleSheet($xsl);
@@ -94,7 +94,7 @@ class PhpMessDetectorTaskStrategy implements TaskStrategyInterface {
 		$xml->load($this->outputDir.'/logs/phpmd.xml');
 
 		$xsl = new DomDocument;
-		$xsl->load(public_path().'/packages/ngmy/stand-ci/xsl/phpmd_overview.xsl');
+		$xsl->load(public_path('packages/ngmy/stand-ci/xsl/phpmd_overview.xsl'));
 
 		$processor = new XSLTProcessor;
 		$processor->importStyleSheet($xsl);

@@ -5,7 +5,7 @@
  * Licensed under MIT License.
  *
  * @package    StandCi
- * @version    0.1.0
+ * @version    2.0.0
  * @author     Ngmy <y.nagamiya@gmail.com>
  * @license    http://opensource.org/licenses/MIT MIT License
  * @copyright  (c) 2015, Ngmy <y.nagamiya@gmail.com>
@@ -59,7 +59,7 @@ class PhpCodeBrowserTaskStrategy implements TaskStrategyInterface {
 		}
 
 		$commands[] = 'cd '.base_path();
-		$commands[] = $this->executable.' '.$this->extraArgs.' --ignore app/storage --log '.$this->outputDir.'/logs --source app --output '.$this->outputDir.'/phpcb';
+		$commands[] = $this->executable.' '.$this->extraArgs.' --log '.$this->outputDir.'/logs --source app --output '.$this->outputDir.'/phpcb';
 
 		$command = implode(';', $commands);
 

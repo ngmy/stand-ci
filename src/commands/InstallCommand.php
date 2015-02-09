@@ -5,7 +5,7 @@
  * Licensed under MIT License.
  *
  * @package    StandCi
- * @version    0.1.0
+ * @version    2.0.0
  * @author     Ngmy <y.nagamiya@gmail.com>
  * @license    http://opensource.org/licenses/MIT MIT License
  * @copyright  (c) 2015, Ngmy <y.nagamiya@gmail.com>
@@ -56,7 +56,7 @@ class InstallCommand extends Command {
 
 	protected function createStorageDirectory()
 	{
-		$rootDirectory      = storage_path().'/packages/ngmy/stand-ci';
+		$rootDirectory      = storage_path('packages/ngmy/stand-ci');
 		$buildsDirectory    = $rootDirectory.'/builds';
 		$artifactsDirectory = $rootDirectory.'/artifacts';
 
@@ -73,10 +73,13 @@ class InstallCommand extends Command {
 
 	protected function publishAsset()
 	{
-		$this->call('asset:publish', array('package' => 'ngmy/stand-ci'));
+		$this->call('vendor:publish', [
+			'--provider' => 'Ngmy\StandCi\StandCiServiceProvider',
+			'--tag'      => 'asset',
+		]);
 
-		$commands[] = 'cd '.public_path().'/packages/ngmy/stand-ci';
-		$commands[] = 'ln -nfs '.storage_path().'/packages/ngmy/stand-ci/artifacts artifacts';
+		$commands[] = 'cd '.public_path('packages/ngmy/stand-ci');
+		$commands[] = 'ln -nfs '.storage_path('packages/ngmy/stand-ci/artifacts').' artifacts';
 
 		$command = implode(';', $commands);
 
@@ -86,7 +89,10 @@ class InstallCommand extends Command {
 
 	protected function publishConfig()
 	{
-		$this->call('config:publish', array('package' => 'ngmy/stand-ci'));
+		$this->call('vendor:publish', [
+			'--provider' => 'Ngmy\StandCi\StandCiServiceProvider',
+			'--tag'      => 'config',
+		]);
 	}
 
 	/**

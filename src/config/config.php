@@ -5,7 +5,7 @@
  * Licensed under MIT License.
  *
  * @package    StandCi
- * @version    0.1.0
+ * @version    2.0.0
  * @author     Ngmy <y.nagamiya@gmail.com>
  * @license    http://opensource.org/licenses/MIT MIT License
  * @copyright  (c) 2015, Ngmy <y.nagamiya@gmail.com>
@@ -58,9 +58,9 @@ return array(
 
 			'failonerror' => true,
 
-			'executable' => base_path().'/vendor/bin/phpunit',
+			'executable' => base_path('vendor/bin/phpunit'),
 
-			'extra_args' => '--configuration app/config/packages/ngmy/stand-ci/phpunit.xml.dist',
+			'extra_args' => '--configuration '.config_path('packages/ngmy/stand-ci/phpunit.xml.dist'),
 
 		),
 
@@ -70,9 +70,9 @@ return array(
 
 			'failonerror' => false,
 
-			'executable' => base_path().'/vendor/bin/phpcs',
+			'executable' => base_path('vendor/bin/phpcs'),
 
-			'extra_args' => '--ignore=config/*,database/*,filters.php,lang/*,routes.php,start/*,storage/*,tests/*,views/*',
+			'extra_args' => '--standard=PSR1',
 
 		),
 
@@ -82,7 +82,7 @@ return array(
 
 			'failonerror' => false,
 
-			'executable' => base_path().'/vendor/bin/phpdoc',
+			'executable' => base_path('vendor/bin/phpdoc'),
 
 			'extra_args' => '',
 
@@ -94,9 +94,9 @@ return array(
 
 			'failonerror' => false,
 
-			'executable' => base_path().'/vendor/bin/phpmd',
+			'executable' => base_path('vendor/bin/phpmd'),
 
-			'extra_args' => '--exclude config,database,filters.php,lang,routes.php,start,storage,tests',
+			'extra_args' => '',
 
 		),
 
@@ -106,9 +106,9 @@ return array(
 
 			'failonerror' => false,
 
-			'executable' => base_path().'/vendor/bin/phpcpd',
+			'executable' => base_path('vendor/bin/phpcpd'),
 
-			'extra_args' => '--names-exclude=filters.php,routes.php --exclude=config --exclude=database --exclude=lang --exclude=start --exclude=storage --exclude=tests',
+			'extra_args' => '',
 
 		),
 
@@ -118,7 +118,7 @@ return array(
 
 			'failonerror' => false,
 
-			'executable' => base_path().'/vendor/bin/phpmetrics',
+			'executable' => base_path('vendor/bin/phpmetrics'),
 
 			'extra_args' => '',
 
@@ -130,9 +130,9 @@ return array(
 
 			'failonerror' => false,
 
-			'executable' => base_path().'/vendor/bin/phpcb',
+			'executable' => base_path('vendor/bin/phpcb'),
 
-			'extra_args' => '--ignore bootstrap --ignore vendor --ignore workbench',
+			'extra_args' => '',
 
 		),
 

@@ -5,8 +5,8 @@
 [![Latest Unstable Version](https://poser.pugx.org/ngmy/stand-ci/v/unstable.svg)](https://packagist.org/packages/ngmy/stand-ci)
 [![License](https://poser.pugx.org/ngmy/stand-ci/license.svg)](https://packagist.org/packages/ngmy/stand-ci)
 
-Stand CI is a continuous integration tool designed for Laravel 4 application.
-It can easily be integrated into your Laravel 4 application.
+Stand CI is a continuous integration tool designed for Laravel 5 application.
+It can easily be integrated into your Laravel 5 application.
 
 ## Integrated Tools
 
@@ -28,9 +28,9 @@ Stand CI has integrated the following tools:
 
 Stand CI has the following requirements:
 
-  * PHP 5.3+
+  * PHP 5.4+
 
-  * Laravel 4.1+
+  * Laravel 5.0+
 
 ## Installation
 
@@ -44,7 +44,7 @@ Add the package to your `composer.json` and run `composer update`:
 }
 ```
 
-Add the following to the list of service providers in `app/config/app.php`:
+Add the following to the list of service providers in `config/app.php`:
 
 ```php
 'Ngmy\StandCi\StandCiServiceProvider',
@@ -108,4 +108,4 @@ Example: The following will build at one minute past midnight each day:
 
 ### Build Notification
 
-If you wish to be notified when the build fails, set the sender and receiver, and the `pretend` option to `false`, in your `app/config/packages/ngmy/stand-ci/notification.php` configuration file.
+If you wish to be notified when the build fails, set the sender and receiver, and the `pretend` option to `false`, in your `config/packages/ngmy/stand-ci/ngmy-stand-ci-notification.php` configuration file.

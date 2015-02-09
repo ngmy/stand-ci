@@ -24,20 +24,20 @@
           @foreach ($builds as $build)
             <tr>
               @if ($build->status === Ngmy\StandCi\Repo\Build\BuildInterface::SUCCESS)
-                <td class="success">{{ link_to(Illuminate\Support\Facades\Config::get('stand-ci::route_prefix').'/builds/'.$build->id, $build->id) }}</td>
+                <td class="success">{!! link_to(config('ngmy-stand-ci')['route_prefix'].'/builds/'.$build->id, $build->id) !!}</td>
                 <td class="success">Success</td>
-                <td class="success">{{ $build->finished_at->diffTimeForHumans($build->started_at) }}</td>
-                <td class="success">{{ $build->finished_at->diffForHumans() }}</td>
+                <td class="success">{!! $build->finished_at->diffTimeForHumans($build->started_at) !!}</td>
+                <td class="success">{!! $build->finished_at->diffForHumans() !!}</td>
               @elseif ($build->status === Ngmy\StandCi\Repo\Build\BuildInterface::FAILURE)
-                <td class="danger">{{ link_to(Illuminate\Support\Facades\Config::get('stand-ci::route_prefix').'/builds/'.$build->id, $build->id) }}</td>
+                <td class="danger">{!! link_to(config('ngmy-stand-ci')['route_prefix'].'/builds/'.$build->id, $build->id) !!}</td>
                 <td class="danger">Failure</td>
-                <td class="danger">{{ $build->finished_at->diffTimeForHumans($build->started_at) }}</td>
-                <td class="danger">{{ $build->finished_at->diffForHumans() }}</td>
+                <td class="danger">{!! $build->finished_at->diffTimeForHumans($build->started_at) !!}</td>
+                <td class="danger">{!! $build->finished_at->diffForHumans() !!}</td>
               @else
-                <td>{{ $build->id }}</td>
+                <td>{!! $build->id !!}</td>
                 <td>Building</td>
-                <td>{{ Ngmy\StandCi\Library\StandCiCarbon::now()->diffTimeForHumans($build->started_at) }}</td>
-                <td>{{ $build->finished_at }}</td>
+                <td>{!! Ngmy\StandCi\Library\StandCiCarbon::now()->diffTimeForHumans($build->started_at) !!}</td>
+                <td>{!! $build->finished_at !!}</td>
               @endif
             </tr>
           @endforeach
@@ -45,7 +45,7 @@
       </table>
     </div>
     <div class="pagination-centered">
-      {{ $builds->links() }}
+      {!! $builds->render() !!}
     </div>
   </div>
 @stop
@@ -56,7 +56,10 @@
       $(document).on('click', '#build-btn', function () {
         $.ajax({
           type: 'POST',
-          url: 'builds'
+          url: 'builds',
+          data: {
+            _token: '{!! csrf_token() !!}'
+          }
         });
         $('#build-btn').prop('disabled', true);
         $('#build-btn').html('Now Building');
@@ -65,9 +68,16 @@
 
     $.pjax.defaults.scrollTo = false;
     setInterval(function () {
+      var url = 'builds';
+      var page = $.query.get('page');
+      if (page !== '') {
+         url += $.query.set('page', page);
+      }
       $.pjax({
         timeout: 10000,
-        url: 'builds',
+        push: false,
+        maxCacheLength: 0,
+        url: url,
         container: '#pjax-container'
       });
     }, 5000);

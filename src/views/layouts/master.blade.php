@@ -1,13 +1,13 @@
 <html>
   <head>
-    {{ Illuminate\Support\Facades\HTML::style('//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css') }}
-    {{ Illuminate\Support\Facades\HTML::style('/packages/ngmy/stand-ci/css/main.css') }}
+    {!! Illuminate\Html\HtmlFacade::style('//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css') !!}
+    {!! Illuminate\Html\HtmlFacade::style('/packages/ngmy/stand-ci/css/main.css') !!}
   </head>
   <body>
     <nav class="navbar navbar-default" role="navigation">
       <div class="container-fluid">
         <div class="navbar-header">
-          {{ link_to(Illuminate\Support\Facades\Config::get('stand-ci::route_prefix').'/builds', 'Stand CI', array('class' => 'navbar-brand')) }}
+          {!! link_to(config('ngmy-stand-ci')['route_prefix'].'/builds', 'Stand CI', array('class' => 'navbar-brand')) !!}
         </div>
       </div><!-- /.container-fluid -->
     </nav>
@@ -20,9 +20,10 @@
       </div>
     </footer>
 
-    {{ Illuminate\Support\Facades\HTML::script('//code.jquery.com/jquery-1.11.0.min.js') }}
-    {{ Illuminate\Support\Facades\HTML::script('/packages/ngmy/stand-ci/js/jquery.pjax.js') }}
-    {{ Illuminate\Support\Facades\HTML::script('/packages/ngmy/stand-ci/js/stand-ci.common.js') }}
+    {!! Illuminate\Html\HtmlFacade::script('//code.jquery.com/jquery-1.11.0.min.js') !!}
+    {!! Illuminate\Html\HtmlFacade::script('/packages/ngmy/stand-ci/js/jquery.pjax.js') !!}
+    {!! Illuminate\Html\HtmlFacade::script('/packages/ngmy/stand-ci/js/jquery.query-object.js') !!}
+    {!! Illuminate\Html\HtmlFacade::script('/packages/ngmy/stand-ci/js/stand-ci.common.js') !!}
     @yield('scripts')
   </body>
 </html>

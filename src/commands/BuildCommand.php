@@ -5,7 +5,7 @@
  * Licensed under MIT License.
  *
  * @package    StandCi
- * @version    0.1.0
+ * @version    2.0.0
  * @author     Ngmy <y.nagamiya@gmail.com>
  * @license    http://opensource.org/licenses/MIT MIT License
  * @copyright  (c) 2015, Ngmy <y.nagamiya@gmail.com>
@@ -15,7 +15,6 @@
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
 use DateTime;
@@ -80,7 +79,7 @@ class BuildCommand extends Command {
 		$id = md5(uniqid(rand(), true));
 
 		$artifactPath = 'packages/ngmy/stand-ci/artifacts/'.$id;
-		$outputDir    = storage_path().'/'.$artifactPath;
+		$outputDir    = storage_path($artifactPath);
 
 		$flag = true;
 
@@ -136,7 +135,7 @@ class BuildCommand extends Command {
 
 		// Send notification
 		if (!$flag) {
-			$url = URL::to(Config::get('stand-ci::route_prefix').'/builds/'.$id);
+			$url = URL::to(config('ngmy-stand-ci')['route_prefix'].'/builds/'.$id);
 
 			throw new StandCiException("Build Failed.\n$url");
 		}

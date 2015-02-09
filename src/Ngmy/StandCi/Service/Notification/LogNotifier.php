@@ -12,14 +12,36 @@
  * @link       https://github.com/ngmy/stand-ci
  */
 
-interface NotifierInterface {
+use Illuminate\Support\Facades\Log;
+
+class LogNotifier implements NotifierInterface {
 
 	/**
 	 * Recipient of notification.
 	 *
 	 * @var string
 	 */
-	public function to($to);
+	protected $to;
+
+	/**
+	 * Sender of notification.
+	 *
+	 * @var string
+	 */
+	protected $from;
+
+	/**
+	 * Recipients of notification.
+	 *
+	 * @param string $to The recipient
+	 * @return Ngmy\StandCi\Service\Notification\NotifierInterface Return self for chainability
+	 */
+	public function to($to)
+	{
+		$this->to = $to;
+
+		return $this;
+	}
 
 	/**
 	 * Sender of notification.
@@ -27,7 +49,12 @@ interface NotifierInterface {
 	 * @param string $from The sender
 	 * @return Ngmy\StandCi\Service\Notification\NotifierInterface Return self for chainability
 	 */
-	public function from($from);
+	public function from($from)
+	{
+		$this->from = $from;
+
+		return $this;
+	}
 
 	/**
 	 * Send notification.
@@ -36,6 +63,10 @@ interface NotifierInterface {
 	 * @param string $message The message of notification
 	 * @return void
 	 */
-	public function notify($subject, $message);
+	public function notify($subject, $message)
+	{
+		Log::error($subject."\n".$message);
+	}
 
 }
+

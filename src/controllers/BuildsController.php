@@ -5,7 +5,7 @@
  * Licensed under MIT License.
  *
  * @package    StandCi
- * @version    0.1.0
+ * @version    2.0.0
  * @author     Ngmy <y.nagamiya@gmail.com>
  * @license    http://opensource.org/licenses/MIT MIT License
  * @copyright  (c) 2015, Ngmy <y.nagamiya@gmail.com>
@@ -15,12 +15,12 @@
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator as Paginator;
+use Illuminate\Routing\Controller as BaseController;
 use Ngmy\StandCi\Repo\Build\BuildInterface;
 use Ngmy\StandCi\Service\Lock\LockerInterface;
 
-class BuildsController extends \BaseController
+class BuildsController extends BaseController
 {
 	protected $build;
 
@@ -46,8 +46,8 @@ class BuildsController extends \BaseController
 		$isLock   = $this->locker->isLock();
 		$pagiData = $this->build->byPage($page, $perPage);
 
-		Paginator::setViewName('pagination::slider-3');
-		$builds = Paginator::make($pagiData->items, $pagiData->totalItems, $perPage);
+		$builds = new Paginator($pagiData->items, $pagiData->totalItems, $perPage);
+		$builds->setPath('/'.config('ngmy-stand-ci')['route_prefix'].'/builds');
 
 		if (Request::header('X-PJAX')) {
 			return View::make('stand-ci::builds.index_pjax', array('builds' => $builds, 'isLock' => $isLock));
@@ -63,8 +63,8 @@ class BuildsController extends \BaseController
 	 */
 	public function store()
 	{
-		system('php ../artisan stand-ci:build');
-		system('php ../artisan stand-ci:housekeep --generation='.Config::get('stand-ci::backup_generation'));
+		system('php ../artisan stand-ci:build > /dev/null &');
+		system('php ../artisan stand-ci:housekeep --max-builds='.config('ngmy-stand-ci')['max_builds'].' > /dev/null &');
 	}
 
 	/**
