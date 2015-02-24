@@ -5,14 +5,13 @@
  * Licensed under MIT License.
  *
  * @package    StandCi
- * @version    0.1.0
+ * @version    1.0.0
  * @author     Ngmy <y.nagamiya@gmail.com>
  * @license    http://opensource.org/licenses/MIT MIT License
  * @copyright  (c) 2015, Ngmy <y.nagamiya@gmail.com>
  * @link       https://github.com/ngmy/stand-ci
  */
 
-use Ngmy\StandCi\Build;
 use Ngmy\StandCi\Repo\Build\FileBuild;
 use Ngmy\StandCi\Service\Lock\FileLocker;
 use Ngmy\StandCi\Service\Task\TaskContext;
@@ -148,8 +147,10 @@ class StandCiServiceProvider extends ServiceProvider {
 	 */
 	protected function registerRepo()
 	{
-		$this->app->bind('Ngmy\StandCi\Repo\Build\BuildInterface', function ($app) {
-			$directory = storage_path().'/packages/ngmy/stand-ci/builds';
+		$app = $this->app;
+
+		$app->bind('Ngmy\StandCi\Repo\Build\BuildInterface', function ($app) {
+			$directory = storage_path('packages/ngmy/stand-ci/builds');
 
 			return new FileBuild($directory);
 		});
@@ -189,7 +190,7 @@ class StandCiServiceProvider extends ServiceProvider {
 		});
 
 		$app->bind('Ngmy\StandCi\Service\Lock\LockerInterface', function ($app) {
-			$lockFile = storage_path().'/packages/ngmy/stand-ci/lock.json';
+			$lockFile = storage_path('packages/ngmy/stand-ci/lock.json');
 
 			return new FileLocker($lockFile);
 		});

@@ -5,7 +5,7 @@
  * Licensed under MIT License.
  *
  * @package    StandCi
- * @version    0.1.0
+ * @version    1.0.0
  * @author     Ngmy <y.nagamiya@gmail.com>
  * @license    http://opensource.org/licenses/MIT MIT License
  * @copyright  (c) 2015, Ngmy <y.nagamiya@gmail.com>
@@ -80,7 +80,7 @@ class BuildCommand extends Command {
 		$id = md5(uniqid(rand(), true));
 
 		$artifactPath = 'packages/ngmy/stand-ci/artifacts/'.$id;
-		$outputDir    = storage_path().'/'.$artifactPath;
+		$outputDir    = storage_path($artifactPath);
 
 		$flag = true;
 

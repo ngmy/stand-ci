@@ -5,7 +5,7 @@
  * Licensed under MIT License.
  *
  * @package    StandCi
- * @version    0.1.0
+ * @version    1.0.0
  * @author     Ngmy <y.nagamiya@gmail.com>
  * @license    http://opensource.org/licenses/MIT MIT License
  * @copyright  (c) 2015, Ngmy <y.nagamiya@gmail.com>
@@ -64,7 +64,7 @@ class HousekeepCommand extends Command {
 
 		foreach ($targetBuilds as $targetBuild) {
 			$this->build->deleteById($targetBuild->id);
-			File::deleteDirectory(public_path().'/'.$targetBuild->artifact);
+			File::deleteDirectory(public_path($targetBuild->artifact));
 		}
 
 		$this->info('Finish housekeeping.');

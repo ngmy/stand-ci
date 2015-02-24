@@ -39,7 +39,7 @@ Add the package to your `composer.json` and run `composer update`:
 ```json
 {
     "require-dev": {
-        "ngmy/stand-ci": "dev-master"
+        "ngmy/stand-ci": "1.x-dev"
     }
 }
 ```

@@ -22,6 +22,7 @@
 
     {{ Illuminate\Support\Facades\HTML::script('//code.jquery.com/jquery-1.11.0.min.js') }}
     {{ Illuminate\Support\Facades\HTML::script('/packages/ngmy/stand-ci/js/jquery.pjax.js') }}
+    {{ Illuminate\Support\Facades\HTML::script('/packages/ngmy/stand-ci/js/jquery.query-object.js') }}
     {{ Illuminate\Support\Facades\HTML::script('/packages/ngmy/stand-ci/js/stand-ci.common.js') }}
     @yield('scripts')
   </body>

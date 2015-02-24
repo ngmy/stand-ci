@@ -3,6 +3,7 @@
     "description": "A continuous integration tool designed for Laravel 4 application",
     "keywords": [
         "laravel 4",
+        "l4",
         "continuous integration",
         "ci",
         "testing"

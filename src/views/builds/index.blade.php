@@ -65,9 +65,16 @@
 
     $.pjax.defaults.scrollTo = false;
     setInterval(function () {
+      var url = 'builds';
+      var page = $.query.get('page');
+      if (page !== '') {
+         url += $.query.set('page', page);
+      }
       $.pjax({
         timeout: 10000,
-        url: 'builds',
+        push: false,
+        maxCacheLength: 0,
+        url: url,
         container: '#pjax-container'
       });
     }, 5000);

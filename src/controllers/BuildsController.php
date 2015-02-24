@@ -5,7 +5,7 @@
  * Licensed under MIT License.
  *
  * @package    StandCi
- * @version    0.1.0
+ * @version    1.0.0
  * @author     Ngmy <y.nagamiya@gmail.com>
  * @license    http://opensource.org/licenses/MIT MIT License
  * @copyright  (c) 2015, Ngmy <y.nagamiya@gmail.com>
@@ -63,8 +63,8 @@ class BuildsController extends \BaseController
 	 */
 	public function store()
 	{
-		system('php ../artisan stand-ci:build');
-		system('php ../artisan stand-ci:housekeep --generation='.Config::get('stand-ci::backup_generation'));
+		system('php ../artisan stand-ci:build > /dev/null &');
+		system('php ../artisan stand-ci:housekeep --max-builds='.Config::get('stand-ci::max_builds').' > /dev/null &');
 	}
 
 	/**
